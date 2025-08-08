@@ -1,0 +1,354 @@
+/**
+ * ZPeC Sistema Professionisti - Tema Rosso Scuro
+ * Sovrascrive i colori Bootstrap primari con rosso scuro
+ */
+
+:root {
+    --zpec-primary: #8B0000;        /* Rosso scuro principale */
+    --zpec-primary-light: #A52A2A;   /* Rosso scuro chiaro */
+    --zpec-primary-dark: #660000;    /* Rosso molto scuro */
+    --zpec-primary-hover: #700000;   /* Rosso hover */
+    --zpec-accent: #DC143C;          /* Rosso accent */
+}
+
+/* Sovrascrittura colori Bootstrap Primary */
+.bg-primary {
+    background-color: var(--zpec-primary) !important;
+}
+
+.text-primary {
+    color: var(--zpec-primary) !important;
+}
+
+.btn-primary {
+    background-color: var(--zpec-primary);
+    border-color: var(--zpec-primary);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--zpec-primary-hover);
+    border-color: var(--zpec-primary-hover);
+}
+
+.btn-primary:active, .btn-primary.active {
+    background-color: var(--zpec-primary-dark);
+    border-color: var(--zpec-primary-dark);
+}
+
+.btn-outline-primary {
+    color: var(--zpec-primary);
+    border-color: var(--zpec-primary);
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    background-color: var(--zpec-primary);
+    border-color: var(--zpec-primary);
+    color: white;
+}
+
+.border-primary {
+    border-color: var(--zpec-primary) !important;
+}
+
+.alert-primary {
+    background-color: rgba(139, 0, 0, 0.1);
+    border-color: var(--zpec-primary-light);
+    color: var(--zpec-primary-dark);
+}
+
+.badge.bg-primary {
+    background-color: var(--zpec-primary) !important;
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--zpec-primary);
+}
+
+.nav-link:hover {
+    color: var(--zpec-primary);
+}
+
+/* Link personalizzati */
+a {
+    color: var(--zpec-primary);
+}
+
+a:hover {
+    color: var(--zpec-primary-hover);
+}
+
+/* Form controls focus */
+.form-control:focus, .form-select:focus {
+    border-color: var(--zpec-primary-light);
+    box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.25);
+}
+
+/* Progress bars */
+.progress-bar {
+    background-color: var(--zpec-primary);
+}
+
+/* Dropdown */
+.dropdown-item.active, .dropdown-item:active {
+    background-color: var(--zpec-primary);
+}
+
+/* Cards con bordi colorati */
+.card-primary {
+    border-color: var(--zpec-primary);
+}
+
+.card-primary .card-header {
+    background-color: var(--zpec-primary);
+    border-color: var(--zpec-primary);
+    color: white;
+}
+
+/* Sidebar e navigazione */
+.sidebar {
+    background: linear-gradient(135deg, var(--zpec-primary-dark), var(--zpec-primary));
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.sidebar .nav-link.active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+}
+
+/* Stat cards */
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid var(--zpec-primary);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-icon.bg-primary {
+    background: linear-gradient(135deg, var(--zpec-primary), var(--zpec-primary-light));
+}
+
+/* Search panel */
+.search-panel {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-top: 3px solid var(--zpec-primary);
+}
+
+/* Tables */
+.table th {
+    border-top: none;
+    background-color: var(--zpec-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(139, 0, 0, 0.05);
+}
+
+/* Modal headers */
+.modal-header {
+    background: linear-gradient(135deg, var(--zpec-primary), var(--zpec-primary-light));
+    color: white;
+    border-bottom: none;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+/* Form sections */
+.form-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid var(--zpec-primary);
+}
+
+.form-section h5 {
+    color: var(--zpec-primary);
+    margin-bottom: 1rem;
+}
+
+/* Status badges personalizzati */
+.status-approvato {
+    background-color: #28a745 !important;
+}
+
+.status-pendente {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+.status-rifiutato {
+    background-color: #dc3545 !important;
+}
+
+.status-sospeso {
+    background-color: #6c757d !important;
+}
+
+/* Login page */
+.login-container {
+    background: linear-gradient(135deg, var(--zpec-primary-dark), var(--zpec-primary));
+    min-height: 100vh;
+}
+
+.login-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.login-header {
+    background: linear-gradient(135deg, var(--zpec-primary), var(--zpec-primary-light));
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Registration form */
+.registration-header {
+    background: linear-gradient(135deg, var(--zpec-primary), var(--zpec-primary-light));
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        z-index: 1050;
+        transition: left 0.3s ease;
+    }
+    
+    .sidebar.show {
+        left: 0;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* DataTables personalizzazione */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--zpec-primary) !important;
+    border-color: var(--zpec-primary) !important;
+    color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: var(--zpec-primary-light) !important;
+    border-color: var(--zpec-primary-light) !important;
+    color: white !important;
+}
+
+/* Animazioni */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Scrollbar personalizzata */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--zpec-primary-light);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--zpec-primary);
+}
+
+/* Utilities */
+.text-zpec-primary {
+    color: var(--zpec-primary) !important;
+}
+
+.bg-zpec-primary {
+    background-color: var(--zpec-primary) !important;
+}
+
+.border-zpec-primary {
+    border-color: var(--zpec-primary) !important;
+}
+
+.btn-zpec-primary {
+    background-color: var(--zpec-primary);
+    border-color: var(--zpec-primary);
+    color: white;
+}
+
+.btn-zpec-primary:hover {
+    background-color: var(--zpec-primary-hover);
+    border-color: var(--zpec-primary-hover);
+}
+
+/* Print styles */
+@media print {
+    .sidebar, .btn, .dropdown {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+    }
+}

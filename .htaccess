@@ -1,0 +1,74 @@
+# Protezione file di configurazione
+<Files "config/*">
+    Require all denied
+</Files>
+
+<Files "classes/*">
+    Require all denied
+</Files>
+
+<Files "utils/*">
+    Require all denied
+</Files>
+
+<Files "database/*">
+    Require all denied
+</Files>
+
+# Reindirizzamenti friendly
+RewriteEngine On
+
+# Reindirizza admin alla dashboard
+RewriteRule ^admin/?$ backend/dashboard.php [L]
+
+# Reindirizza login
+RewriteRule ^login/?$ backend/login.php [L]
+
+# Reindirizza home alla pagina principale
+RewriteRule ^home/?$ frontend/index.php [L]
+
+# Reindirizza registrazione
+RewriteRule ^registrazione/?$ frontend/registrazione.php [L]
+
+# Sicurezza aggiuntiva
+# Blocca accesso a file sensibili
+<FilesMatch "\.(sql|md|log|bak)$">
+    Require all denied
+</FilesMatch>
+
+# Headers di sicurezza
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Compressione
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Cache statico
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/ico "access plus 1 month"
+    ExpiresByType image/icon "access plus 1 month"
+    ExpiresByType text/plain "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+</IfModule>
