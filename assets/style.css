@@ -93,6 +93,26 @@ a:hover {
     background-color: var(--zpec-primary);
 }
 
+/* Assicura che i dropdown siano visibili */
+.dropdown-menu {
+    z-index: 1050;
+    min-width: 200px;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(139, 0, 0, 0.1);
+}
+
+/* Stile per i bottoni dropdown */
+.btn-group .dropdown-toggle::after {
+    margin-left: 0.5em;
+}
+
 /* Cards con bordi colorati */
 .card-primary {
     border-color: var(--zpec-primary);

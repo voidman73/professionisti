@@ -17,15 +17,15 @@ class CompetenzeIT {
     /**
      * Inserisce una nuova competenza informatica
      */
-    public function inserisci($profilo_id, $competenza_codice, $livello, $anni_esperienza = null, $certificazioni = null) {
+    public function inserisci($profilo_id, $competenza_id, $livello, $anni_esperienza = null, $certificazioni = null) {
         try {
             $query = "INSERT INTO " . $this->table . " 
-                     (profilo_id, competenza_codice, livello, anni_esperienza, certificazioni) 
-                     VALUES (:profilo_id, :competenza_codice, :livello, :anni_esperienza, :certificazioni)";
+                     (profilo_id, competenza_id, livello, anni_esperienza, certificazioni) 
+                     VALUES (:profilo_id, :competenza_id, :livello, :anni_esperienza, :certificazioni)";
             
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':profilo_id', $profilo_id);
-            $stmt->bindValue(':competenza_codice', $competenza_codice);
+            $stmt->bindValue(':competenza_id', $competenza_id);
             $stmt->bindValue(':livello', $livello);
             $stmt->bindValue(':anni_esperienza', $anni_esperienza);
             $stmt->bindValue(':certificazioni', $certificazioni);
@@ -44,7 +44,7 @@ class CompetenzeIT {
         try {
             $query = "SELECT i.*, ie.nome as competenza_nome, ie.categoria, ie.descrizione
                      FROM " . $this->table . " i
-                     JOIN " . $this->table_elenco . " ie ON i.competenza_codice = ie.codice
+                     JOIN " . $this->table_elenco . " ie ON i.competenza_id = ie.id
                      WHERE i.profilo_id = :profilo_id 
                      ORDER BY ie.categoria ASC, ie.nome ASC";
             
@@ -156,37 +156,29 @@ class CompetenzeIT {
      */
     public function ottieniLivelli() {
         return [
-            'BASE' => 'Base',
-            'INTERMEDIO' => 'Intermedio',
-            'AVANZATO' => 'Avanzato',
-            'ESPERTO' => 'Esperto'
+            1 => 'Base',
+            2 => 'Intermedio',
+            3 => 'Avanzato',
+            4 => 'Esperto',
+            5 => 'Specialista'
         ];
     }
 
     /**
      * Cerca professionisti per competenza IT
      */
-    public function cercaProfessionisti($competenza_codice, $livello_minimo = 'BASE', $anni_minimi = null) {
+    public function cercaProfessionisti($competenza_id, $livello_minimo = 1, $anni_minimi = null) {
         try {
-            $livelli_ordine = ['BASE' => 1, 'INTERMEDIO' => 2, 'AVANZATO' => 3, 'ESPERTO' => 4];
-            $livello_min_ordine = $livelli_ordine[$livello_minimo] ?? 1;
-            
             $query = "SELECT i.*, p.nome, p.cognome, p.email, ie.nome as competenza_nome
                      FROM " . $this->table . " i
                      JOIN Profili p ON i.profilo_id = p.id
-                     JOIN " . $this->table_elenco . " ie ON i.competenza_codice = ie.codice
-                     WHERE i.competenza_codice = :competenza_codice
-                     AND CASE 
-                         WHEN i.livello = 'BASE' THEN 1
-                         WHEN i.livello = 'INTERMEDIO' THEN 2
-                         WHEN i.livello = 'AVANZATO' THEN 3
-                         WHEN i.livello = 'ESPERTO' THEN 4
-                         ELSE 0
-                     END >= :livello_min_ordine";
+                     JOIN " . $this->table_elenco . " ie ON i.competenza_id = ie.id
+                     WHERE i.competenza_id = :competenza_id
+                     AND i.livello >= :livello_minimo";
             
             $params = [
-                ':competenza_codice' => $competenza_codice,
-                ':livello_min_ordine' => $livello_min_ordine
+                ':competenza_id' => $competenza_id,
+                ':livello_minimo' => $livello_minimo
             ];
             
             if ($anni_minimi !== null) {
@@ -194,12 +186,7 @@ class CompetenzeIT {
                 $params[':anni_minimi'] = $anni_minimi;
             }
             
-            $query .= " ORDER BY CASE 
-                           WHEN i.livello = 'ESPERTO' THEN 4
-                           WHEN i.livello = 'AVANZATO' THEN 3
-                           WHEN i.livello = 'INTERMEDIO' THEN 2
-                           WHEN i.livello = 'BASE' THEN 1
-                       END DESC, i.anni_esperienza DESC, p.cognome, p.nome";
+            $query .= " ORDER BY i.livello DESC, i.anni_esperienza DESC, p.cognome, p.nome";
             
             $stmt = $this->conn->prepare($query);
             foreach ($params as $param => $valore) {
@@ -223,8 +210,8 @@ class CompetenzeIT {
             // Competenze più richieste
             $query = "SELECT ie.nome, ie.categoria, COUNT(*) as numero 
                      FROM " . $this->table . " i
-                     JOIN " . $this->table_elenco . " ie ON i.competenza_codice = ie.codice
-                     GROUP BY i.competenza_codice, ie.nome, ie.categoria
+                     JOIN " . $this->table_elenco . " ie ON i.competenza_id = ie.id
+                     GROUP BY i.competenza_id, ie.nome, ie.categoria
                      ORDER BY numero DESC LIMIT 15";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
@@ -233,7 +220,7 @@ class CompetenzeIT {
             // Distribuzione per categoria
             $query = "SELECT ie.categoria, COUNT(*) as numero 
                      FROM " . $this->table . " i
-                     JOIN " . $this->table_elenco . " ie ON i.competenza_codice = ie.codice
+                     JOIN " . $this->table_elenco . " ie ON i.competenza_id = ie.id
                      GROUP BY ie.categoria
                      ORDER BY numero DESC";
             $stmt = $this->conn->prepare($query);
@@ -244,12 +231,7 @@ class CompetenzeIT {
             $query = "SELECT livello, COUNT(*) as numero 
                      FROM " . $this->table . " 
                      GROUP BY livello 
-                     ORDER BY CASE 
-                         WHEN livello = 'BASE' THEN 1
-                         WHEN livello = 'INTERMEDIO' THEN 2
-                         WHEN livello = 'AVANZATO' THEN 3
-                         WHEN livello = 'ESPERTO' THEN 4
-                     END";
+                     ORDER BY livello ASC";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
             $stats['distribuzione_livelli'] = $stmt->fetchAll();
@@ -263,13 +245,13 @@ class CompetenzeIT {
     /**
      * Verifica se un professionista ha già una competenza
      */
-    public function haCompetenza($profilo_id, $competenza_codice) {
+    public function haCompetenza($profilo_id, $competenza_id) {
         try {
             $query = "SELECT COUNT(*) as count FROM " . $this->table . " 
-                     WHERE profilo_id = :profilo_id AND competenza_codice = :competenza_codice";
+                     WHERE profilo_id = :profilo_id AND competenza_id = :competenza_id";
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(':profilo_id', $profilo_id);
-            $stmt->bindValue(':competenza_codice', $competenza_codice);
+            $stmt->bindValue(':competenza_id', $competenza_id);
             $stmt->execute();
             
             return $stmt->fetch()['count'] > 0;
@@ -285,7 +267,7 @@ class CompetenzeIT {
         try {
             $query = "SELECT i.*, ie.nome as competenza_nome, ie.categoria, ie.descrizione
                      FROM " . $this->table . " i
-                     JOIN " . $this->table_elenco . " ie ON i.competenza_codice = ie.codice
+                     JOIN " . $this->table_elenco . " ie ON i.competenza_id = ie.id
                      WHERE i.profilo_id = :profilo_id 
                      ORDER BY ie.categoria ASC, ie.nome ASC";
             

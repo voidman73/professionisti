@@ -209,12 +209,12 @@ class Professionista {
             
             $placeholders = str_repeat('?,', count($ids) - 1) . '?';
             
-            $query = "SELECT p.*, cp.nome as categoria_nome, s.nome as specializzazione_nome 
+            $query = "SELECT p.*, pr_res.Provincia as provincia_residenza_nome, pr_dom.Provincia as provincia_domicilio_nome
                      FROM " . $this->table . " p
-                     LEFT JOIN categorie_professionali cp ON p.categoria_id = cp.id
-                     LEFT JOIN specializzazioni s ON p.specializzazione_id = s.id
+                     LEFT JOIN Province pr_res ON p.provincia_residenza = pr_res.Sigla
+                     LEFT JOIN Province pr_dom ON p.provincia_domicilio = pr_dom.Sigla
                      WHERE p.id IN ($placeholders)
-                     ORDER BY p.data_iscrizione DESC";
+                     ORDER BY p.data_registrazione DESC";
 
             $stmt = $this->conn->prepare($query);
             $stmt->execute($ids);

@@ -211,37 +211,41 @@ try {
                     </div>
                     <div class="card-body">
                         <dl class="row mb-0">
+                            <?php if (isset($dati['categoria_nome']) && $dati['categoria_nome']): ?>
                             <dt class="col-5">Categoria:</dt>
                             <dd class="col-7">
                                 <span class="badge bg-primary"><?= htmlspecialchars($dati['categoria_nome']) ?></span>
                             </dd>
+                            <?php endif; ?>
                             
-                            <?php if ($dati['specializzazione_nome']): ?>
+                            <?php if (isset($dati['specializzazione_nome']) && $dati['specializzazione_nome']): ?>
                             <dt class="col-5">Specializzazione:</dt>
                             <dd class="col-7">
                                 <span class="badge bg-info"><?= htmlspecialchars($dati['specializzazione_nome']) ?></span>
                             </dd>
                             <?php endif; ?>
                             
+                            <?php if (isset($dati['anni_esperienza']) && $dati['anni_esperienza']): ?>
                             <dt class="col-5">Esperienza:</dt>
                             <dd class="col-7">
                                 <strong><?= $dati['anni_esperienza'] ?> anni</strong>
                             </dd>
+                            <?php endif; ?>
                             
-                            <?php if ($dati['numero_iscrizione_albo']): ?>
+                            <?php if (isset($dati['numero_iscrizione_albo']) && $dati['numero_iscrizione_albo']): ?>
                             <dt class="col-5">N. Albo:</dt>
                             <dd class="col-7"><?= htmlspecialchars($dati['numero_iscrizione_albo']) ?></dd>
                             
                             <dt class="col-5">Albo:</dt>
                             <dd class="col-7"><?= htmlspecialchars($dati['albo_professionale']) ?></dd>
                             
-                            <?php if ($dati['data_iscrizione_albo']): ?>
+                            <?php if (isset($dati['data_iscrizione_albo']) && $dati['data_iscrizione_albo']): ?>
                             <dt class="col-5">Iscrizione:</dt>
                             <dd class="col-7"><?= date('d/m/Y', strtotime($dati['data_iscrizione_albo'])) ?></dd>
                             <?php endif; ?>
                             <?php endif; ?>
                             
-                            <?php if ($dati['lingue_parlate']): ?>
+                            <?php if (isset($dati['lingue_parlate']) && $dati['lingue_parlate']): ?>
                             <dt class="col-5">Lingue:</dt>
                             <dd class="col-7"><?= htmlspecialchars($dati['lingue_parlate']) ?></dd>
                             <?php endif; ?>
@@ -276,21 +280,33 @@ try {
                                 <?php endif; ?>
                             </dd>
                             
+                            <?php if (isset($dati['raggio_azione_km']) && $dati['raggio_azione_km']): ?>
                             <dt class="col-5">Raggio azione:</dt>
                             <dd class="col-7"><?= $dati['raggio_azione_km'] ?> km</dd>
-                            
-                            <?php if ($dati['tariffa_oraria']): ?>
-                            <dt class="col-5">Tariffa oraria:</dt>
-                            <dd class="col-7"><strong>€ <?= number_format($dati['tariffa_oraria'], 2, ',', '.') ?></strong></dd>
                             <?php endif; ?>
                             
-                            <?php if ($dati['tariffa_giornaliera']): ?>
+                            <?php if (isset($dati['tariffa_oraria_min']) && $dati['tariffa_oraria_min']): ?>
+                            <dt class="col-5">Tariffa oraria:</dt>
+                            <dd class="col-7">
+                                <strong>€ <?= number_format($dati['tariffa_oraria_min'], 2, ',', '.') ?></strong>
+                                <?php if (isset($dati['tariffa_oraria_max']) && $dati['tariffa_oraria_max']): ?>
+                                    - <strong>€ <?= number_format($dati['tariffa_oraria_max'], 2, ',', '.') ?></strong>
+                                <?php endif; ?>
+                            </dd>
+                            <?php endif; ?>
+                            
+                            <?php if (isset($dati['tariffa_giornaliera_min']) && $dati['tariffa_giornaliera_min']): ?>
                             <dt class="col-5">Tariffa giornaliera:</dt>
-                            <dd class="col-7"><strong>€ <?= number_format($dati['tariffa_giornaliera'], 2, ',', '.') ?></strong></dd>
+                            <dd class="col-7">
+                                <strong>€ <?= number_format($dati['tariffa_giornaliera_min'], 2, ',', '.') ?></strong>
+                                <?php if (isset($dati['tariffa_giornaliera_max']) && $dati['tariffa_giornaliera_max']): ?>
+                                    - <strong>€ <?= number_format($dati['tariffa_giornaliera_max'], 2, ',', '.') ?></strong>
+                                <?php endif; ?>
+                            </dd>
                             <?php endif; ?>
                         </dl>
                         
-                        <?php if ($dati['note_tariffe']): ?>
+                        <?php if (isset($dati['note_tariffe']) && $dati['note_tariffe']): ?>
                         <div class="mt-3">
                             <strong>Note tariffe:</strong>
                             <p class="small mb-0"><?= nl2br(htmlspecialchars($dati['note_tariffe'])) ?></p>
@@ -302,7 +318,7 @@ try {
         </div>
         
         <!-- Competenze -->
-        <?php if ($dati['competenze']): ?>
+        <?php if (isset($dati['competenze_principali']) && $dati['competenze_principali']): ?>
         <div class="row">
             <div class="col-12 mb-4">
                 <div class="card">
@@ -310,7 +326,7 @@ try {
                         <h6 class="mb-0"><i class="fas fa-cogs me-2"></i>Competenze e Specialità</h6>
                     </div>
                     <div class="card-body">
-                        <p class="mb-0"><?= nl2br(htmlspecialchars($dati['competenze'])) ?></p>
+                        <p class="mb-0"><?= nl2br(htmlspecialchars($dati['competenze_principali'])) ?></p>
                     </div>
                 </div>
             </div>
@@ -534,7 +550,7 @@ try {
                     <div class="card-body">
                         <dl class="row mb-0">
                             <dt class="col-3">Data iscrizione:</dt>
-                            <dd class="col-9"><?= date('d/m/Y H:i', strtotime($dati['data_iscrizione'])) ?></dd>
+                            <dd class="col-9"><?= date('d/m/Y H:i', strtotime($dati['data_registrazione'])) ?></dd>
                             
                             <dt class="col-3">Ultima modifica:</dt>
                             <dd class="col-9"><?= date('d/m/Y H:i', strtotime($dati['data_ultima_modifica'])) ?></dd>

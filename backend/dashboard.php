@@ -43,6 +43,10 @@ if (isset($_GET['anni_esperienza_min']) && !empty($_GET['anni_esperienza_min']))
 // Ottieni professionisti con filtri
 $professionisti = $professionista->ottieniTutti($filtri);
 $albi = $albo->ottieniTutti();
+
+// Ottieni province per i filtri
+$provincia = new Provincia();
+$province = $provincia->ottieniTutte();
 $page_title = 'Dashboard Amministrazione - Professionisti';
 $css_path = '../assets/style.css';
 $body_class = 'bg-light';
@@ -100,6 +104,25 @@ include '../includes/header.php';
         border-radius: 10px;
         padding: 20px;
         margin-bottom: 20px;
+    }
+    
+    /* Stili per i dropdown - FORZATI */
+    .dropdown-menu {
+        z-index: 9999 !important;
+        min-width: 200px !important;
+        display: none !important;
+    }
+    
+    .dropdown-menu.show {
+        display: block !important;
+    }
+    
+    .dropdown-item {
+        cursor: pointer !important;
+    }
+    
+    .dropdown-item:hover {
+        background-color: rgba(139, 0, 0, 0.1) !important;
     }
 </style>
     <div class="container-fluid">
@@ -161,9 +184,22 @@ include '../includes/header.php';
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Dashboard Amministrazione</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
-                        <button class="btn btn-outline-secondary btn-sm">
-                            <i class="fas fa-download me-2"></i>Esporta Dati
-                        </button>
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-download me-2"></i>Esporta Dati
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="esporta.php?<?= http_build_query($_GET) ?>&formato=csv">
+                                    <i class="fas fa-file-csv me-2"></i>CSV
+                                </a></li>
+                                <li><a class="dropdown-item" href="esporta.php?<?= http_build_query($_GET) ?>&formato=xlsx">
+                                    <i class="fas fa-file-excel me-2"></i>Excel (XLSX)
+                                </a></li>
+                                <li><a class="dropdown-item" href="esporta.php?<?= http_build_query($_GET) ?>&formato=pdf">
+                                    <i class="fas fa-file-pdf me-2"></i>PDF
+                                </a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -327,9 +363,38 @@ include '../includes/header.php';
                             <button class="btn btn-outline-primary" onclick="approvaSelezionati()">
                                 <i class="fas fa-check me-1"></i>Approva Selezionati
                             </button>
-                            <button class="btn btn-outline-secondary" onclick="esportaSelezionati()">
-                                <i class="fas fa-download me-1"></i>Esporta
-                            </button>
+                            <div class="dropdown d-inline-block me-2">
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-download me-1"></i>Esporta Selezionati
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" onclick="esportaSelezionati('csv')">
+                                        <i class="fas fa-file-csv me-2"></i>CSV
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="esportaSelezionati('xlsx')">
+                                        <i class="fas fa-file-excel me-2"></i>Excel (XLSX)
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="esportaSelezionati('pdf')">
+                                        <i class="fas fa-file-pdf me-2"></i>PDF
+                                    </a></li>
+                                </ul>
+                            </div>
+                            <div class="dropdown d-inline-block">
+                                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-download me-1"></i>Esporta Tutti
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" onclick="esportaTutti('csv')">
+                                        <i class="fas fa-file-csv me-2"></i>CSV
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="esportaTutti('xlsx')">
+                                        <i class="fas fa-file-excel me-2"></i>Excel (XLSX)
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="esportaTutti('pdf')">
+                                        <i class="fas fa-file-pdf me-2"></i>PDF
+                                    </a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -466,23 +531,73 @@ include '../includes/header.php';
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     
     <script>
         // Inizializza DataTables
         $(document).ready(function() {
             $('#professionisti-table').DataTable({
                 "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/it-IT.json"
+                    "url": "../assets/datatables-it.php"
                 },
                 "pageLength": 25,
                 "order": [[7, "desc"]], // Ordina per data iscrizione
                 "columnDefs": [
                     { "orderable": false, "targets": [0, 8] } // Checkbox e azioni non ordinabili
                 ]
+            });
+            
+            // Inizializza i dropdown Bootstrap - SOLUZIONE ROBUSTA
+            setTimeout(function() {
+                // Verifica che Bootstrap sia caricato
+                if (typeof bootstrap !== 'undefined') {
+                    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+                    dropdownElementList.forEach(function (dropdownToggleEl) {
+                        new bootstrap.Dropdown(dropdownToggleEl);
+                    });
+                    console.log('Dropdown inizializzati:', dropdownElementList.length);
+                } else {
+                    console.error('Bootstrap non è caricato!');
+                }
+            }, 100);
+            
+            // Soluzione alternativa per i dropdown - PIÙ AGGRESSIVA
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('dropdown-toggle')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Chiudi tutti gli altri dropdown
+                    document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                        menu.classList.remove('show');
+                    });
+                    
+                    // Apri/chiudi questo dropdown
+                    var dropdownMenu = e.target.nextElementSibling;
+                    if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                        dropdownMenu.classList.toggle('show');
+                        console.log('Dropdown toggled:', dropdownMenu.classList.contains('show'));
+                    }
+                } else {
+                    // Chiudi dropdown quando si clicca fuori
+                    document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+                        menu.classList.remove('show');
+                    });
+                }
+            });
+            
+            // Debug: stampa informazioni sui dropdown
+            console.log('Dropdown trovati:', document.querySelectorAll('.dropdown-toggle').length);
+            document.querySelectorAll('.dropdown-toggle').forEach(function(btn, index) {
+                console.log('Dropdown', index, ':', btn.textContent.trim());
             });
         });
 
@@ -550,7 +665,7 @@ include '../includes/header.php';
             }
         }
 
-        function esportaSelezionati() {
+        function esportaSelezionati(formato = 'csv') {
             const selezionati = document.querySelectorAll('.prof-checkbox:checked');
             if (selezionati.length === 0) {
                 alert('Seleziona almeno un professionista');
@@ -558,7 +673,15 @@ include '../includes/header.php';
             }
             
             const ids = Array.from(selezionati).map(cb => cb.value);
-            window.open(`esporta.php?ids=${ids.join(',')}`);
+            window.open(`esporta.php?ids=${ids.join(',')}&formato=${formato}`);
+        }
+
+        function esportaTutti(formato = 'csv') {
+            // Esporta tutti i professionisti con i filtri attuali
+            const currentUrl = new URL(window.location);
+            const params = new URLSearchParams(currentUrl.search);
+            params.set('formato', formato);
+            window.open(`esporta.php?${params.toString()}`);
         }
     </script>
 

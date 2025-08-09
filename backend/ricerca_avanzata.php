@@ -319,9 +319,22 @@ include '../includes/header.php';
                         <span class="badge bg-primary"><?= $total_risultati ?></span>
                     </h5>
                     <?php if ($total_risultati > 0): ?>
-                    <a href="esporta.php?<?= http_build_query($_GET) ?>" class="btn btn-success btn-sm">
-                        <i class="fas fa-file-excel me-2"></i>Esporta CSV
-                    </a>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-download me-2"></i>Esporta
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="esporta.php?<?= http_build_query($_GET) ?>&formato=csv">
+                                <i class="fas fa-file-csv me-2"></i>CSV
+                            </a></li>
+                            <li><a class="dropdown-item" href="esporta.php?<?= http_build_query($_GET) ?>&formato=xlsx">
+                                <i class="fas fa-file-excel me-2"></i>Excel (XLSX)
+                            </a></li>
+                            <li><a class="dropdown-item" href="esporta.php?<?= http_build_query($_GET) ?>&formato=pdf">
+                                <i class="fas fa-file-pdf me-2"></i>PDF
+                            </a></li>
+                        </ul>
+                    </div>
                     <?php endif; ?>
                 </div>
                 <div class="card-body">
