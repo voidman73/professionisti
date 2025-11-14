@@ -1,16 +1,16 @@
 <?php
-session_start();
+require_once '../includes/auth_middleware.php';
+requireAuth(); // Richiede autenticazione 2FA
+
+require_once '../config/database.php';
 require_once '../classes/Admin.php';
 require_once '../classes/Professionista.php';
 require_once '../classes/Albo.php';
 require_once '../classes/Provincia.php';
-// require_once '../classes/Categoria.php'; // RIMOSSO: sostituito con Albo.php
+require_once '../classes/CompetenzeIT.php';
 
-// Controllo autenticazione
-if (!isset($_SESSION['admin_id'])) {
-    header('Location: login.php');
-    exit;
-}
+// Log dell'accesso al dashboard
+logAction('DASHBOARD_ACCESS', 'Accesso al dashboard amministrativo');
 
 $professionista = new Professionista();
 $albo = new Albo();

@@ -34,3 +34,30 @@
     </style>
 </head>
 <body class="<?= isset($body_class) ? $body_class : '' ?>">
+    <?php if (function_exists('getCurrentUser') && getCurrentUser()): ?>
+    <!-- Header con info utente -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.php">
+                <i class="fas fa-users-cog"></i> ZPeC Admin
+            </a>
+            
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i> <?= htmlspecialchars(getCurrentUser()['name']) ?>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><span class="dropdown-item-text text-muted">
+                            <i class="fas fa-envelope"></i> <?= htmlspecialchars(getCurrentUser()['email']) ?>
+                        </span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="logout_2fa.php">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <?php endif; ?>
